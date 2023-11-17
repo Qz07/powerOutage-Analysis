@@ -13,10 +13,34 @@ Therefore, the central question for this study is: __whether a states' utility i
 # Cleaning and EDA
 The initial data came in the style of Excel(.xlsx), with descriptions for columns. When directly reading in the excel file it returns a disorted dataframe with unescessay columns. Pre-cleaning was done on the initial file by manually deleted information that is outside of the data set and the data set was saved in 'outageClean.csv' as a csv file. This dataset was read in as `powerOutage` afterwards.
 
-When observing the dataset we realized some redudancy in columns that can be combined. Such as, the start date and start time of the outage duration can be combined as one time marker including both the date and time. This step is also done with the restoration day and time. Column that are involved are later droped from the orginal dataframe. Next, in understanding the question, we wanted to work with a smaller dataframe instead as we dropped all other unecssary columns keeping only the general information, GSP, and `OUTAGE.DURATION `. 
-#TODO Step 3, should not be included in the pipe line but rather an manipulation check later in the progress. 
+When observing the dataset we realized some redudancy in columns that can be combined. Such as, the start date and start time of the outage duration can be combined as one time marker including both the date and time. This step is also done with the restoration day and time. Column that are involved are later droped from the orginal dataframe. 
+```
+def clean_time(df, col1, col2, name)
+
+Parameter: 
+df: dataframe being cleaned on
+col1: the name of the column containinng dates str
+col2: the name of the column contaning timestamps of the day
+name: The new name for the column str
+
+```
+
+Next, in understanding the question, we wanted to work with a smaller dataframe instead as we dropped all other unecssary columns keeping only the general information, GSP, and `OUTAGE.DURATION `. 
+```
+def filter_columns(df, *dropRanges)
+
+Parameter: 
+df: dataframe being cleaned on
+*dropRanges: the range of columns that can be droped on
+```
 
 However, the information given is not enough to do cross comparsion between columns. Which we assigned a new column `UTIL.REALGSP.CONTRI.PROP`, this column contains the utility industries contibution to total GSP in relation to the state's over all GSP. It is computed with `UTIL.REALGSP` divided by `TOTAL.REALGSP`. 
+'''
+def add_util_prop(df)
+
+Parameter:
+df: dataframe being cleaned on
+'''
 
 All the manipulation of the dataframe is written in as functions and later piped on to the orginal dataframe. 
 
