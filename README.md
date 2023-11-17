@@ -36,11 +36,11 @@ The main focuse point of the project is to analysis the weight of different fact
 
 <iframe src="assets/hist-duration.html" width=800 height=600 frameBorder=0></iframe>
 
-It is a right skewed graph, so that means majority power outage is within 20,000 mins. The tail of the histogram drag till 100k,this resembles the presense of outliers. Thus, when considering a valid aggration method, using the **median** will be more accurate in measuring the central tendency of the outage duration.
+It is a right skewed graph, so that means majority power outage is within 20,000 mins. The tail of the histogram drag till 100k, this resembles the presense of outliers. Thus, when considering a valid aggration method, using the **median** will be more accurate in measuring the central tendency of the outage duration. The choice of median can be traced back to our orginal quesiton of how the relationship of outage duration with GSP in general, when only taking the median, we can cut off on the influence of outlier's impact on the dataset. 
 
 ## Bivariate Analysis
 
-Tracking back to the question, we wanted to observe which factor weighted the most in a sever power outage. First, it is important to see the trend of outage duration over the past years. 
+Tracking back to the question, we wanted to observe which factor weighted the most in a sever power outage. First, it is important to see the trend of outage duration over the past years. We groupby the year and 
 
 <iframe src="assets/duration-year.html" width=800 height=600 frameBorder=0></iframe>
 
@@ -75,7 +75,7 @@ TODO: Check if we need to specify a certain column
 Guided by our question, more infomation is needed for the `OUTAGE.DURATION` column so that we will be able to use it in detailed later during hypothese testing. 
 
 ### Relationship between `POPULATION` and `OUTAGE.DURATION`
-Intuitively, we hypothesis that the missingness of power outage duration might depends on the populations. The population decide the amount of people that will be impacted by the power outage. If population of the state is relative lower, then less people will be impacted by the power outage. Therefore, they are more likely not to record the outage duration. 
+Intuitively, we hypothesize that the missingness of power outage duration might depends on the populations. The population decide the amount of people that will be impacted by the power outage. If population of the state is relative lower, then less people will be impacted by the power outage. Therefore, they are more likely not to record the outage duration. 
 
 Before running permutation test, we want to decide the test statistic that will be used to measure the difference between two distributions. If the distributions are similar to each other, we can use the absolute mean difference. If the distribute has different shapes, we can use Kolmogorov Smirnov Test statistic (KS test) which measures the difference between graphs'cumulative distribution.
 
@@ -97,7 +97,7 @@ The missingness of `OUTAGE_DURATION` is indepdent from the `POPULATION`
 After sufficent amount of data cleaning & EDA, careful review on the missingness of one of the important column, we are able to answer the question we mentioned eariler. To answer the qestion: whether the states' relative utility GSP is one of the leading factors that impact the severity of the power outage? We will run permutation test on `OUTAGE_DURATION` column and `UTIL.REALGSP.CONTRI.PROP`. We define the states with relative utility GSP higher than or equal to the average US utility GSP of that specific year to be the state with high utility GSP. On the other hand, the state with utility GSP lower than the average US utility GSP will be define as low utlity GSP state. By doing this, we split our data set to two groups
 
 In doing this, our hypothesis will be:
-- Null hypothesis: Both states with high utility GSP or states with low utility GSP will share __excatly same__ distribution of power outage duration
+- Null hypothesis: Both states with high utility GSP or states with low utility GSP will share __same__ distribution of power outage duration
 - Alternative hypothesis: States with high utility GSP will have __different__ power outage duration from the states with low utility GSP
 
 <iframe src="assets/durationGSP.html" width=800 height=600 frameBorder=0></iframe>
