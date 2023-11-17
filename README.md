@@ -71,9 +71,23 @@ This dataset is collected from multiple sources and when merging the data togeth
 We think that there is column whoes missingness is __NMAR__. If we are able to obtain more data such as the total cost behind the power outage, we might be able to asscess the missingness of the other columns that exist in the dataset due to it's relationship. 
 TODO: Check if we need to specify a certain column
 
-## 
+## Missingness Dependency
+Guided by our question, more infomation is needed for the `OUTAGE.DURATION` column so that we will be able to use it in detailed later during hypothese testing. 
+
+### Relationship between `POPULATION` and `OUTAGE.DURATION`
+Intuitively, we hypothesis that the missingness of power outage duration might depends on the populations. The population decide the amount of people that will be impacted by the power outage. If population of the state is relative lower, then less people will be impacted by the power outage. Therefore, they are more likely not to record the outage duration. 
+
+Before running permutation test, we want to decide the test statistic that will be used to measure the difference between two distributions. If the distributions are similar to each other, we can use the absolute mean difference. If the distribute has different shapes, we can use Kolmogorov Smirnov Test statistic (KS test) which measures the difference between graphs'cumulative distribution.
+
+<iframe src="assets/missingDurationPopulation.html" width=800 height=600 frameBorder=0></iframe>
+
+The shape of two distributions look similar to each other, so we can use absolute mean difference to measure the similarity between two distributions. We will use the abstrct function `abs_diff_p_val` we defined previously to caluclate the p value
+
+<iframe src="assets/empricalPopulationKS.html" width=800 height=600 frameBorder=0></iframe>
 
 # Hypothesis Testing
+<iframe src="assets/durationGSP.html" width=800 height=600 frameBorder=0></iframe>
 
+<iframe src="assets/hypTestKS.html" width=800 height=600 frameBorder=0></iframe>
 # References
 Mukherjee, S., Nateghi, R., & Hastak, M. (2018). Data on major power outage events in the continental U.S. Data in Brief, 19, 2079–2083. https://doi.org/10.1016/j.dib.2018.06.067
