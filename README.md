@@ -35,21 +35,21 @@ The main focuse point of the project is to analysis the weight of different fact
 
 <iframe src="assets/hist-duration.html" width=800 height=600 frameBorder=0></iframe>
 
-It is a right skewed graph, so that means majority power outage is within 20,000 mins. The tail of the histogram drag till 100k, this resembles the presense of outliers. Thus, when considering a valid aggration method, using the **median** will be more accurate in measuring the central tendency of the outage duration. The choice of median can be traced back to our orginal quesiton of how the relationship of outage duration with GSP in general, when only taking the median, we can cut off on the influence of outlier's impact on the dataset. 
+It is a right skewed graph, so that means majority power outage is within 20,000 mins. The tail of the histogram drag till 100k, this resembles the presense of outliers. Thus, when considering a valid aggration method, using the **median** will be more accurate in measuring the central tendency of the outage duration. The choice of median can be traced back to our orginal quesiton of the weight of economic factors on outage duration, when only taking the median, we can cut off on the influence of outlier's impact on the dataset. 
 
 ## Bivariate Analysis
 
-Tracking back to the question, we wanted to observe which factor weighted the most in a sever power outage. First, it is important to see the trend of outage duration over the past years. We groupby the year and 
+Tracking back to the question, we wanted to observe which factor weighted the most in a sever power outage. First, it is important to see the trend of outage duration over the past years. We groupby the year to choose the aggrate method of median for the test statists to observe the change of outage duration and how it differents over the years. 
 
 <iframe src="assets/duration-year.html" width=800 height=600 frameBorder=0></iframe>
 
-There is a decreasing trend on the utility GSP contribution over times. It correponds to the previous line plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease. 
-
-we wanted to observe the weight of economic factors on the severity of the power outage. A bivariate graph is created to analysis the trend in utility industies' GSP against years. 
+Apperantly, there is a decreasing trend on the utility GSP contribution over time. It correponds to the previous line plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease 
 
 <iframe src="assets/GSP-relation-to-duration.html" width=800 height=600 frameBorder=0></iframe>
 
-Apperantly, there is a decreasing trend on the utility GSP contribution over time. It correponds to the previous line plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease 
+There is a decreasing trend on the utility GSP contribution over times. It correponds to the previous scatter plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease. 
+
+we wanted to observe the weight of economic factors on the severity of the power outage. A bivariate graph is created to analysis the trend in utility industies' GSP against years. 
 
 ## Pivot Table 
 To look more into the trend of the power outages relationship to economic standards, we assigned high and low labels on GSP accourding to the mean GSP. 
@@ -67,8 +67,10 @@ This then guides our question in: whether the states' relative utility GSP is on
 
 This dataset is collected from multiple sources and when merging the data together there is a possiblity of unconsistence. If possible, we would like to get access to all the sub datasets that are used to generate this dataset to assess the missingness better. There are 5 sub datasets that all sorced from governemnt agencies, it would also be helpful to compare the information with other sources. Since all the current data are less likley to contain any biases when collected by governement agencies, if compared to other sources we may be able to draw significant patterns accounding to the missingness of values. 
 
-We think that there is column whoes missingness is __NMAR__. If we are able to obtain more data such as the total cost behind the power outage, we might be able to asscess the missingness of the other columns that exist in the dataset due to it's relationship. 
-TODO: Check if we need to specify a certain column
+We think that there is column whoes missingness is __NMAR__. If we are able to obtain more data such as the total cost behind the power outage, we might be able to asscess the missingness of the other columns that exist in the dataset due to it's relationship.
+
+For example, in the column `DEMAND.LOSS.MW`, there is a total of 705 missing values, when reading through the the dataset description on the website this column is described as the peak demand lost amount during an otage event(MW), (some values in the column might be the total outage lost instead). If we were able to collect more data on the aspect of loss in terms of total cost, then there might be a correlation between the actual total cost (dollars) in relation to the peak demand lost. It can be possible that when peak demand lost are high that the total cost will also be high. Thus, with the extra data we might be able to state that the missingness of `DEMAND.LOSS.MW` is __MAR__ and later perform imputation based on the dependent columns. 
+
 
 ## Missingness Dependency
 Guided by our question, more infomation is needed for the `OUTAGE.DURATION` column so that we will be able to use it in detailed later during hypothese testing. 
@@ -101,9 +103,24 @@ In doing this, our hypothesis will be:
 
 <iframe src="assets/durationGSP.html" width=800 height=600 frameBorder=0></iframe>
 
-The shape of two distributions look similar to each other, so we can use absolute mean difference to measure the similarity between two distributions. We will use the abstrct function `abs_diff_p_val` we defined previously to caluclate the p value
+The shape of two distributions look similar to each other, so we can use absolute mean difference to measure the similarity between two distributions. We will use the abstract function `abs_diff_p_val` we defined previously to caluclate the p value. 
 
-<iframe src="assets/hypTestKS.html" width=800 height=600 frameBorder=0></iframe>
+abs_diff_p_val(df, col1, co2, N)
+
+Parameters: 
+df: the dataframe being used
+col1: the name of a column in str
+col2: the name of a column in str
+N: the number of time to run the permutation int
+return: tuple contain three values: p_value, generated test stat, observed value, repectively
+
+With this we make the function call on our cleaned dataframe and columns `untilGSPaboveAvg` and `OUTAGE.DURATION`. Where we shuffled the values in `OUTAGE.DURATION` and used the test stat of absolute mean differences between the two group that are in the column `untilGSPaboveAvg`. 
+
+Function call given below:
+```p_value, emprical, obs = abs_diff_p_val(powerOutage, 'untilGSPaboveAvg','OUTAGE.DURATION',10_000)```
+
+After 10,000 iterations, we were able to obtain the empirical distribution below: 
+<iframe src="assets/hypTestPerm.html" width=800 height=600 frameBorder=0></iframe>
 
 since the p value is 0.0 which is less than critical value 0.05, we reject the null hypothesis. It is possible that the distribution for States with high utility GSP will have different distribution of outage duration apart from the states with low utility GSP. 
 
