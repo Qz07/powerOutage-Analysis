@@ -1,5 +1,6 @@
-# Introduction
+# Power Outage Analysis with States Economic Performance
 
+# Introduction
 Imagine you are training a machine learning model on your company server, and unexpectedly, the power goes off! Now, the model that you have spent the whole afternoon training on is gone. You realize that you have lost your chance of getting a promotion this year. As data scientist whose life depends on the supply of electricity, we are curious about the driving factors that cause major power outages with high severity.
 
 This project will investigate the relationship between economic performance, measured by Gross State Product(GSP), and the severity of major power outages, measured by outage duration in minutes in the United States from January 2000 to July 2016. The major outages are defined by the Department of Energy as those affecting at least 50,000 customers or causing an unplanned firm load loss of at least 300 MW. (create citation).  Each row in the dataset describes a specific event of a major power outage. There are in total 56 columns and separated into 7 major categories. They are Time, Geographical information, causes, consumption, customer population, economic outcome, and land use characteristics. With our purpose in discovering the weight of economic factors that contributes to major power outages, the columns that we will be analyzing in depth on are specifically the columns named: `OUTAGE.DURATION`, `PC.REALGSP.REL`, and `UTIL.REALGSP. CONTRI.PROP`. In `OUTAGE.DURATION`, the data are in the format of floats containing the duration of the outage in minutes. `PC.REALGSP.REL`, is the relative per captia of GSP compared to total per capital real GDP of the US. `UTIL.REALGSP.CONTRI.PROP`, this column is produced in similar format to the column from above taking the relative per captia of GSP for industry related contributions over the total real GSP. This step is performed later during the Cleanign and EDA phase. 
@@ -18,6 +19,16 @@ When observing the dataset we realized some redudancy in columns that can be com
 However, the information given is not enough to do cross comparsion between columns. Which we assigned a new column `UTIL.REALGSP.CONTRI.PROP`, this column contains the utility industries contibution to total GSP in relation to the state's over all GSP. It is computed with `UTIL.REALGSP` divided by `TOTAL.REALGSP`. 
 
 All the manipulation of the dataframe is written in as functions and later piped on to the orginal dataframe. 
+
+Below is the cleaned dataset's first 5 rows 
+
+|    |   OBS |   YEAR |   MONTH | U.S._STATE   | POSTAL.CODE   | NERC.REGION   |   OUTAGE.DURATION |   DEMAND.LOSS.MW |   CUSTOMERS.AFFECTED |   PC.REALGSP.STATE |   PC.REALGSP.USA |   PC.REALGSP.REL |   PC.REALGSP.CHANGE |   UTIL.REALGSP |   TOTAL.REALGSP |   UTIL.CONTRI |   PI.UTIL.OFUSA |   POPULATION |   POPPCT_URBAN |   POPPCT_UC |   POPDEN_URBAN |   POPDEN_UC |   POPDEN_RURAL | OUTAGE.START        | OUTAGE.RESTORATION   |   UTIL.REALGSP.CONTRI.PROP |
+|---:|------:|-------:|--------:|:-------------|:--------------|:--------------|------------------:|-----------------:|---------------------:|-------------------:|-----------------:|-----------------:|--------------------:|---------------:|----------------:|--------------:|----------------:|-------------:|---------------:|------------:|---------------:|------------:|---------------:|:--------------------|:---------------------|---------------------------:|
+|  0 |     1 |   2011 |       7 | Minnesota    | MN            | MRO           |              3060 |              nan |                70000 |              51268 |            47586 |          1.07738 |                 1.6 |           4802 |          274182 |       1.75139 |             2.2 |      5348119 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 | 2011-07-01 05:00:00 | 2011-07-03 08:00:00  |                  0.0175139 |
+|  1 |     2 |   2014 |       5 | Minnesota    | MN            | MRO           |                 1 |              nan |                  nan |              53499 |            49091 |          1.08979 |                 1.9 |           5226 |          291955 |       1.79    |             2.2 |      5457125 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 | 2014-05-11 06:38:00 | 2014-05-11 06:39:00  |                  0.0179    |
+|  2 |     3 |   2010 |      10 | Minnesota    | MN            | MRO           |              3000 |              nan |                70000 |              50447 |            47287 |          1.06683 |                 2.7 |           4571 |          267895 |       1.70627 |             2.1 |      5310903 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 | 2010-10-26 08:00:00 | 2010-10-28 10:00:00  |                  0.0170627 |
+|  3 |     4 |   2012 |       6 | Minnesota    | MN            | MRO           |              2550 |              nan |                68200 |              51598 |            48156 |          1.07148 |                 0.6 |           5364 |          277627 |       1.93209 |             2.2 |      5380443 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 | 2012-06-19 04:30:00 | 2012-06-20 11:00:00  |                  0.0193209 |
+|  4 |     5 |   2015 |       7 | Minnesota    | MN            | MRO           |              1740 |              250 |               250000 |              54431 |            49844 |          1.09203 |                 1.7 |           4873 |          292023 |       1.6687  |             2.2 |      5489594 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 | 2015-07-18 02:00:00 | 2015-07-19 07:00:00  |                  0.016687  |
 
 ## Univariate Analysis
 The main focuse point of the project is to analysis the weight of different factor's contribution on outage duration. A histogram is generated from the `OUTAGE.DURATION` column to observe the density of outage duration's overall spread.
@@ -40,7 +51,20 @@ we wanted to observe the weight of economic factors on the severity of the power
 
 Apperantly, there is a decreasing trend on the utility GSP contribution over time. It correponds to the previous line plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease 
 
+## Pivot Table 
+To look more into the trend of the power outages relationship to economic standards, we assigned high and low labels on GSP accourding to the mean GSP. 
+
+| stateGSPaboveAvg   |   False |   True |
+|:-------------------|--------:|-------:|
+| False              |   272   |   1440 |
+| True               |   369.5 |    870 |
+
+Base on the table above, suprisingly we can make new modification on our question. It seems like the state with low relative utility GSP has the shortest power outage duration. In other words, the state with high relative untility GSP will cause a more sever power outage base on the duration. From this result, we hypothesis that the states with large relative GSP utility are more likely to have large utility secotor. If they experience power outage, it **might** takes the large utility sectors more time to restore the outage. However, we need more domain knowledge to assest the claim.
+
+This then guides our question in: whether the states' relative utility GSP is one of the leading factors that impact the severity of the power outage?
+
 # Assessment of Missingness
+<State whether you believe there is a column in your dataset that is NMAR. Explain your reasoning and any additional data you might want to obtain that could explain the missingness (thereby making it MAR). Make sure to explicitly use the term “NMAR.”>
 
 
 # Hypothesis Testing
