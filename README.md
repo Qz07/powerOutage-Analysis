@@ -105,6 +105,7 @@ In doing this, our hypothesis will be:
 
 The shape of two distributions look similar to each other, so we can use absolute mean difference to measure the similarity between two distributions. We will use the abstract function `abs_diff_p_val` we defined previously to caluclate the p value. 
 
+```
 abs_diff_p_val(df, col1, co2, N)
 
 Parameters: 
@@ -114,10 +115,13 @@ col2: the name of a column in str
 N: the number of time to run the permutation int
 return: tuple contain three values: p_value, generated test stat, observed value, repectively
 
+```
 With this we make the function call on our cleaned dataframe and columns `untilGSPaboveAvg` and `OUTAGE.DURATION`. Where we shuffled the values in `OUTAGE.DURATION` and used the test stat of absolute mean differences between the two group that are in the column `untilGSPaboveAvg`. 
 
 Function call given below:
-```p_value, emprical, obs = abs_diff_p_val(powerOutage, 'untilGSPaboveAvg','OUTAGE.DURATION',10_000)```
+```
+p_value, emprical, obs = abs_diff_p_val(powerOutage, 'untilGSPaboveAvg','OUTAGE.DURATION',10_000)
+```
 
 After 10,000 iterations, we were able to obtain the empirical distribution below: 
 <iframe src="assets/hypTestPerm.html" width=800 height=600 frameBorder=0></iframe>
