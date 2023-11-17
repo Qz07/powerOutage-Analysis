@@ -1,9 +1,10 @@
 # Power Outage Analysis with States Economic Performance
+Qirui Zheng, Guoxuan Xu
 
 # Introduction
 Imagine you are training a machine learning model on your company server, and unexpectedly, the power goes off! Now, the model that you have spent the whole afternoon training on is gone. You realize that you have lost your chance of getting a promotion this year. As data scientist whose life depends on the supply of electricity, we are curious about the driving factors that cause major power outages with high severity.
 
-This project will investigate the relationship between economic performance, measured by Gross State Product(GSP), and the severity of major power outages, measured by outage duration in minutes in the United States from January 2000 to July 2016. The major outages are defined by the Department of Energy as those affecting at least 50,000 customers or causing an unplanned firm load loss of at least 300 MW. (create citation).  Each row in the dataset describes a specific event of a major power outage. There are in total 56 columns and separated into 7 major categories. They are Time, Geographical information, causes, consumption, customer population, economic outcome, and land use characteristics. With our purpose in discovering the weight of economic factors that contributes to major power outages, the columns that we will be analyzing in depth on are specifically the columns named: `OUTAGE.DURATION`, `PC.REALGSP.REL`, and `UTIL.REALGSP. CONTRI.PROP`. In `OUTAGE.DURATION`, the data are in the format of floats containing the duration of the outage in minutes. `PC.REALGSP.REL`, is the relative per captia of GSP compared to total per capital real GDP of the US. `UTIL.REALGSP.CONTRI.PROP`, this column is produced in similar format to the column from above taking the relative per captia of GSP for industry related contributions over the total real GSP. This step is performed later during the Cleanign and EDA phase. 
+This project will investigate the relationship between economic performance, measured by Gross State Product(GSP), and the severity of major power outages, measured by outage duration in minutes in the United States from January 2000 to July 2016. The major outages are defined by the Department of Energy as those affecting at least 50,000 customers or causing an unplanned firm load loss of at least 300 MW. (Mukherjee et al. 2018).  Each row in the dataset describes a specific event of a major power outage. There are in total 56 columns and separated into 7 major categories. They are Time, Geographical information, causes, consumption, customer population, economic outcome, and land use characteristics. With our purpose in discovering the weight of economic factors that contributes to major power outages, the columns that we will be analyzing in depth on are specifically the columns named: `OUTAGE.DURATION`, `PC.REALGSP.REL`, and `UTIL.REALGSP. CONTRI.PROP`. In `OUTAGE.DURATION`, the data are in the format of floats containing the duration of the outage in minutes. `PC.REALGSP.REL`, is the relative per captia of GSP compared to total per capital real GDP of the US. `UTIL.REALGSP.CONTRI.PROP`, this column is produced in similar format to the column from above taking the relative per captia of GSP for industry related contributions over the total real GSP. This step is performed later during the Cleanign and EDA phase. 
 
 Considering the fact that industrial customers require the highest amount of energy and their output can be directly represented by the states' GSP statistic. A robust GSP statistic may indicate a state's capacity to invest in and maintain critical infrastructure, potentially reducing the severity and duration of power outages. Conversely, states with weaker economic performance may experience longer outage times due to less well-made infrastructure.
 
@@ -64,7 +65,15 @@ Base on the table above, suprisingly we can make new modification on our questio
 This then guides our question in: whether the states' relative utility GSP is one of the leading factors that impact the severity of the power outage?
 
 # Assessment of Missingness
-<State whether you believe there is a column in your dataset that is NMAR. Explain your reasoning and any additional data you might want to obtain that could explain the missingness (thereby making it MAR). Make sure to explicitly use the term “NMAR.”>
 
+This dataset is collected from multiple sources and when merging the data together there is a possiblity of unconsistence. If possible, we would like to get access to all the sub datasets that are used to generate this dataset to assess the missingness better. There are 5 sub datasets that all sorced from governemnt agencies, it would also be helpful to compare the information with other sources. Since all the current data are less likley to contain any biases when collected by governement agencies, if compared to other sources we may be able to draw significant patterns accounding to the missingness of values. 
+
+We think that there is column whoes missingness is __NMAR__. If we are able to obtain more data such as the total cost behind the power outage, we might be able to asscess the missingness of the other columns that exist in the dataset due to it's relationship. 
+TODO: Check if we need to specify a certain column
+
+## 
 
 # Hypothesis Testing
+
+# References
+Mukherjee, S., Nateghi, R., & Hastak, M. (2018). Data on major power outage events in the continental U.S. Data in Brief, 19, 2079–2083. https://doi.org/10.1016/j.dib.2018.06.067
