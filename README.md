@@ -1,5 +1,5 @@
 # Power Outage Analysis with States Economic Performance
-Qirui Zheng, Guoxuan Xu
+By: Guoxuan Xu, Qirui Zheng
 
 # Introduction
 Imagine you are training a machine learning model on your company server, and unexpectedly, the power goes off! Now, the model that you have spent the whole afternoon training on is gone. You realize that you have lost your chance of getting a promotion this year. As data scientist whose life depends on the supply of electricity, we are curious about the driving factors that cause major power outages with high severity.
