@@ -81,13 +81,34 @@ Before running permutation test, we want to decide the test statistic that will 
 
 <iframe src="assets/missingDurationPopulation.html" width=800 height=600 frameBorder=0></iframe>
 
-The shape of two distributions look similar to each other, so we can use absolute mean difference to measure the similarity between two distributions. We will use the abstrct function `abs_diff_p_val` we defined previously to caluclate the p value
+The distribution is different which tell us that we should implement K-S test statistic in our permutation test.
 
 <iframe src="assets/empricalPopulationKS.html" width=800 height=600 frameBorder=0></iframe>
+During the test:
+Null Hypothesis: The missingness of `OUTAGE.DURATION` is independent from `POPULATION`
+Alternative Hypothesis: The missingness of `OUTAGE.DURATION` is dependent on `POPULATION`
+
+Since the p value after running permutation test is 0.35 which is greater than 0.05, we failed to reject the null that the `POPULATION` distribution with missing power outage duration comes from the same population as the `POPULATION` distribution without missing power outage.
+
+The missingness of `OUTAGE_DURATION` is indepdent from the `POPULATION`
 
 # Hypothesis Testing
+
+After sufficent amount of data cleaning & EDA, careful review on the missingness of one of the important column, we are able to answer the question we mentioned eariler. To answer the qestion: whether the states' relative utility GSP is one of the leading factors that impact the severity of the power outage? We will run permutation test on `OUTAGE_DURATION` column and `UTIL.REALGSP.CONTRI.PROP`. We define the states with relative utility GSP higher than or equal to the average US utility GSP of that specific year to be the state with high utility GSP. On the other hand, the state with utility GSP lower than the average US utility GSP will be define as low utlity GSP state. By doing this, we split our data set to two groups
+
+In doing this, our hypothesis will be:
+- Null hypothesis: Both states with high utility GSP or states with low utility GSP will share __excatly same__ distribution of power outage duration
+- Alternative hypothesis: States with high utility GSP will have __different__ power outage duration from the states with low utility GSP
+
 <iframe src="assets/durationGSP.html" width=800 height=600 frameBorder=0></iframe>
 
+The shape of two distributions look similar to each other, so we can use absolute mean difference to measure the similarity between two distributions. We will use the abstrct function `abs_diff_p_val` we defined previously to caluclate the p value
+
 <iframe src="assets/hypTestKS.html" width=800 height=600 frameBorder=0></iframe>
+
+since the p value is 0.0 which is less than critical value 0.05, we reject the null hypothesis. It is possible that the distribution for States with high utility GSP will have different distribution of outage duration apart from the states with low utility GSP. 
+
+We can say that the economic performance of a state on its utility industries is a main factor that impact the severity of its major power outages.
+
 # References
 Mukherjee, S., Nateghi, R., & Hastak, M. (2018). Data on major power outage events in the continental U.S. Data in Brief, 19, 2079–2083. https://doi.org/10.1016/j.dib.2018.06.067
