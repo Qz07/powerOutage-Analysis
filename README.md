@@ -80,10 +80,10 @@ we wanted to observe the weight of economic factors on the severity of the power
 ## Pivot Table 
 To look more into the trend of the power outages relationship to economic standards, we assigned high and low labels on GSP accourding to the mean GSP. 
 
-| stateGSPaboveAvg   |   False |   True |
+| GSP Above Average  |   High |   Low |
 |:-------------------|--------:|-------:|
-| False              |   272   |   1440 |
-| True               |   369.5 |    870 |
+| High              |   272   |   1440 |
+| Low               |   369.5 |    870 |
 
 Base on the table above, suprisingly we can make new modification on our question. It seems like the state with low relative utility GSP has the shortest power outage duration. In other words, the state with high relative untility GSP will cause a more sever power outage base on the duration. From this result, we hypothesis that the states with large relative GSP utility are more likely to have large utility secotor. If they experience power outage, it **might** takes the large utility sectors more time to restore the outage. However, we need more domain knowledge to assest the claim.
 
