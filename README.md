@@ -8,7 +8,7 @@ This project will investigate the relationship between state utility industries'
 
 Considering the fact that industrial customers require the highest amount of energy and their output can be directly represented by the states' GSP statistic. A robust GSP statistic may indicate a state's capacity to invest in and maintain critical infrastructure, potentially reducing the severity and duration of power outages. Conversely, states with weaker economic performance may experience longer outage times due to less well-made infrastructure.
 
-Therefore, the central question for this study is: __whether a states' utility industries' GSP is a significant factor that contributes to the severity of power outages__. This analysis will be vital to multiple parties, including policymakers and utility companies. The findings of the project will act as strong evidence for them to impose strategic investments in states' infrastructure to contribute to the propersity of the states. Our original question only considered the impact of overall GSP, however, as the project progresses, the guiding question evolved in response to emerging data patterns. And intuitively, it makes more sense to look at the GSP of utility industries because they are the main party that regulate the electrity supply.
+Therefore, the central question for this study is: __whether a state utility industries' GSP is a significant factor that contributes to the severity of power outages__. This analysis will be vital to multiple parties, including policymakers and utility companies. The findings of the project will act as strong evidence for them to impose strategic investments in states' infrastructure to contribute to the propersity of the states. Our original question only considered the impact of overall GSP, however, as the project progresses, the guiding question evolved in response to emerging data patterns. And intuitively, it makes more sense to look at the GSP of utility industries because they are the main party that regulate the electrity supply.
 
 # Cleaning and EDA
 The initial data came in the style of Excel(.xlsx), with descriptions for columns. When directly reading in the excel file it returns a disorted dataframe with unescessay columns. Pre-cleaning was done on the initial file by manually deleted information that is outside of the data set and the data set was saved in 'outageClean.csv' as a csv file. This dataset was read in as `powerOutage` afterwards.
@@ -35,12 +35,14 @@ df: dataframe being cleaned on
 ```
 
 However, the information given is not enough to do cross comparsion between columns. Which we assigned a new column `UTIL.REALGSP.CONTRI.PROP`, this column contains the utility industries contibution to total GSP in relation to the state's over all GSP. It is computed with `UTIL.REALGSP` divided by `TOTAL.REALGSP`. 
-'''
+```
 def add_util_prop(df)
 
 Parameter:
 df: dataframe being cleaned on
-'''
+```
+
+Furthermore, we also categorize the state GSP and utility GSP into two groups by comparing them with their yearly average. We defined GSP that is higher than average as high GSP and GSP that is lower than the average low GSP. We categorize `PC.REALGSP.REL` by defining every number that is higher than 1, high GSP and the rest low GSP. We categorize `UTIL.REALGSP.CONTRI.PROP` by the average `UTIL.REALGSP.CONTRI.PROP` each year.
 
 All the manipulation of the dataframe is written in as functions and later piped on to the orginal dataframe. 
 
@@ -67,7 +69,7 @@ Tracking back to the question, we wanted to observe which factor weighted the mo
 
 <iframe src="assets/duration-year.html" width=800 height=600 frameBorder=0></iframe>
 
-Apperantly, there is a decreasing trend on the utility GSP contribution over time. It correponds to the previous line plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease 
+Apperantly, there is a decreasing trend on the utility GSP contribution over time. It correponds to the previous scatter plot on the year vs. outage time duration. This implies that as the times go both outage time duration and relative GSP constribution of utility industry decrease 
 
 <iframe src="assets/GSP-relation-to-duration.html" width=800 height=600 frameBorder=0></iframe>
 
@@ -110,8 +112,8 @@ The distribution is different which tell us that we should implement K-S test st
 
 <iframe src="assets/empricalPopulationKS.html" width=800 height=600 frameBorder=0></iframe>
 During the test:
-Null Hypothesis: The missingness of `OUTAGE.DURATION` is independent from `POPULATION`
-Alternative Hypothesis: The missingness of `OUTAGE.DURATION` is dependent on `POPULATION`
+- Null Hypothesis: The missingness of `OUTAGE.DURATION` is independent from `POPULATION`
+- Alternative Hypothesis: The missingness of `OUTAGE.DURATION` is dependent on `POPULATION`
 
 Since the p value after running permutation test is 0.35 which is greater than 0.05, we failed to reject the null that the `POPULATION` distribution with missing power outage duration comes from the same population as the `POPULATION` distribution without missing power outage.
 
@@ -122,7 +124,7 @@ The missingness of `OUTAGE_DURATION` is indepdent from the `POPULATION`
 After sufficent amount of data cleaning & EDA, careful review on the missingness of one of the important column, we are able to answer the question we mentioned eariler. To answer the qestion: whether the states' relative utility GSP is one of the leading factors that impact the severity of the power outage? We will run permutation test on `OUTAGE_DURATION` column and `UTIL.REALGSP.CONTRI.PROP`. We define the states with relative utility GSP higher than or equal to the average US utility GSP of that specific year to be the state with high utility GSP. On the other hand, the state with utility GSP lower than the average US utility GSP will be define as low utlity GSP state. By doing this, we split our data set to two groups
 
 In doing this, our hypothesis will be:
-- Null hypothesis: Both states with high utility GSP or states with low utility GSP will share __same__ distribution of power outage duration
+- Null hypothesis: Both states with high utility GSP or states with low utility GSP will __likely to share same__ distribution of power outage duration
 - Alternative hypothesis: States with high utility GSP will have __different__ power outage duration from the states with low utility GSP
 
 <iframe src="assets/durationGSP.html" width=800 height=600 frameBorder=0></iframe>
