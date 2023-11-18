@@ -152,7 +152,7 @@ p_value, emprical, obs = abs_diff_p_val(powerOutage, 'untilGSPaboveAvg','OUTAGE.
 After 10,000 iterations, we were able to obtain the empirical distribution below: 
 <iframe src="assets/hypTestPerm.html" width=800 height=600 frameBorder=0></iframe>
 
-since the p value is 0.0 which is less than critical value 0.05, we reject the null hypothesis. It is possible that the distribution for States with high utility GSP will have different distribution of outage duration apart from the states with low utility GSP. 
+since the p value is 0.0 which is less than the standard significance level 0.05, we reject the null hypothesis. It is possible that the distribution for States with high utility GSP will have different distribution of outage duration apart from the states with low utility GSP. 
 
 We can say that the economic performance of a state on its utility industries is a main factor that impact the severity of its major power outages.
 
