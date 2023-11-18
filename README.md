@@ -101,7 +101,7 @@ For example, in the column `DEMAND.LOSS.MW`, there is a total of 705 missing val
 ## Missingness Dependency
 Guided by our question, more infomation is needed for the `OUTAGE.DURATION` column so that we will be able to use it in detailed later during hypothese testing. 
 
-### Relationship between `POPULATION` and `OUTAGE.DURATION`
+### Relationship between `POPULATION` and missingness of `OUTAGE.DURATION` (MCAR)
 Intuitively, we hypothesize that the missingness of power outage duration might depends on the populations. The population decide the amount of people that will be impacted by the power outage. If population of the state is relative lower, then less people will be impacted by the power outage. Therefore, they are more likely not to record the outage duration. 
 
 Before running permutation test, we want to decide the test statistic that will be used to measure the difference between two distributions. If the distributions are similar to each other, we can use the absolute mean difference. If the distribute has different shapes, we can use Kolmogorov Smirnov Test statistic (KS test) which measures the difference between graphs'cumulative distribution.
@@ -118,6 +118,23 @@ During the test:
 Since the p value after running permutation test is 0.35 which is greater than 0.05, we failed to reject the null that the `POPULATION` distribution with missing power outage duration comes from the same population as the `POPULATION` distribution without missing power outage.
 
 The missingness of `OUTAGE_DURATION` is indepdent from the `POPULATION`
+
+### Relationship between `RES.PRICE` and missingness of `OUTAGE.DURATION`(MAR)
+
+We also hypothesize that the `RES.PRICE` might impact missingness of the `OUTAGE_DURATION` column. `RES.PRICE` columns inform us the monthly electricty price in the residential sector. We think that the residents in the sector with high monthly electricity price care more about the electricty usage statistic which includes the outage duration so they are more likely to report the outage duration with detailized starting and ending time. On the other hand, residents live in sector with low monthly electricity price might not care about the outage duration since there is no much of differences on their electricity bill if there is an outage.
+
+<iframe src="assets/miss2dist.html" width=800 height=600 frameBorder=0></iframe>
+
+The distribution is different which tell us that we should implement K-S test statistic in our permutation test. The Emprical Distribution of test static below:
+
+<iframe src="assets/miss2ts.html" width=800 height=600 frameBorder=0></iframe>
+
+After running permutation test, the p value is 0.0089 which is less than the standard significance level 0.05. We reject the null hypothesis and accept the alternative hypothesis that the distributions of `RES.PRICE` with and without missing outage duration is different from each other.
+
+The missingness of `OUTAGE_DURATION` is dependent on the `RES.PRICE` column, this may imply the missingness of `OUTAGE.DURATION` is missing at random (MAR)
+
+For future work,
+with the conclusion from above, we can impute Outage_duration missing value using the `RES.PRICE` column. Since the existance of outliers in `OUTAGE.DURATION` weights more, the imputation planned is median imputation. 
 
 # Hypothesis Testing
 
